@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Image Based on Input</title>
+    <script>
+        function displayImage() {
+            var n = document.getElementById("inputNumber").value;
+            var img1 = document.getElementById("img1");
+            var img2 = document.getElementById("img2");
+
+            if (n == 2) {
+                img1.style.display = "block";
+                img2.style.display = "none";
+            } else if (n == 3) {
+                img1.style.display = "none";
+                img2.style.display = "block";
+            } else {
+                img1.style.display = "none";
+                img2.style.display = "none";
+            }
+        }
+
+        function displayImageOnClick() {
+            displayImage();
+        }
+    </script>
+</head>
+<body>
+    <label for="inputNumber">Enter a number (2 or 3):</label>
+    <input type="number" id="inputNumber">
+    <button onclick="displayImageOnClick()">Display Image</button>
+    
+    <img id="img1" src="img1.png" alt="Image 1" style="display: none;">
+    <img id="img2" src="img2.png" alt="Image 2" style="display: none;">
+</body>
+</html>

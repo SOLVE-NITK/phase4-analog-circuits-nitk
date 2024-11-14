@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOLVE-COLPITTS</title>
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"/>
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/query.css" />
+    <script
+      defer
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://code.jquery.com/ui/1.8.17/jquery-ui.min.js"
+    ></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script defer src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
+    ></script>
+    <script defer src="js/jsplumb.js"></script>
+
+    <script defer src="js/script.js"></script>
+  </head>
+  <body onload="varinit();startsim();">
+    <!-- Logo -->
+    <!-- Experiment Title -->
+    <!-- Tools Sections -->
+    <!-- Tools Container -->
+    <!-- Simulation Container -->
+    <div class="title-div-container">
+
+      <div class="title-div">
+          <div class="logo-div">
+            <a href="#"><img src="images/logo_nitk.png" alt="Logo" class="logo" /></a>
+          </div>
+          <h1>COLPITTS OSCILLATOR</h1>
+        </div>
+      </div>
+    <div class="container">
+      <div class="sidebar">
+        <ul class="tool-menu">
+          <li class="tool-list">
+            <a href="#simulation" class="tool-link" title="Simulation"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#fdfdfd"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="rgb(28, 138, 138)"
+                class="icons">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6zM7.5 6h.008v.008H7.5V6zm2.25 0h.008v.008H9.75V6z"
+                />
+              </svg>
+            </a>
+            <span>Simulation</span>
+          </li>
+          <li class="tool-list">
+            <a href="#variables" class="tool-link" title="Variables"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#ffffff"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="rgb(28, 138, 138)"
+                class="icons">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.5 3c.967 2.78 1.5 5.817 1.5 9s-.533 6.22-1.5 9M8.25 8.885l1.444-.89a.75.75 0 011.105.402l2.402 7.206a.75.75 0 001.104.401l1.445-.889m-8.25.75l.213.09a1.687 1.687 0 002.062-.617l4.45-6.676a1.688 1.688 0 012.062-.618l.213.09"/>
+              </svg>
+            </a>
+              <span>Variables</span>
+          </li>
+          <li class="tool-list">
+            <a href="#controls" class="tool-link" title="controls"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#fdfdfd"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="rgb(28, 138, 138)"
+                class="icons"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg></a
+              >
+              
+              <span>Controls</span>
+          </li>
+          <li class="tool-list">
+            <img id="graphbutton"  src="./images/graphbutton.svg" alt="" class="icons"/>
+            <span>Graph</span>
+          </li>
+        </ul>
+      </div>
+      <div class="main">
+        <div class="main-section">
+          <div id="simulation" class="main__task-div">
+            <h3 class="task-title">Simulation</h3>
+            <div class="canvas__div">
+              
+              <div class="circuit-dia">
+                <div class="img1">
+                  <img id="image1" class="image1" src="images/colpitts.png" alt="Class B Amplifier">
+                  <div id="dot1Red" class="dot dot-red dot-red--1"></div>
+                <div id="dot1Black" class="dot dot-black dot-black--1"></div>
+                </div>
+                <div class="img2">
+                  <img id="image2" class="image2"  src="images/OIP.jpeg"  alt="oscilloscope">
+                  <div id="dot2Red" class="dot dot-red dot-red--2"></div>
+                  <div id="dot2Black" class="dot dot-black dot-black--2"></div>
+                </div>
+                <div class="redln"></div>
+                <div class="blackln"></div>
+                <div class="line-1"></div>
+                <div class="line-2"></div>
+              </div>
+            
+              <div class="graph-div display-hide">
+                <canvas id="graphscreen"></canvas>           
+                 </div>
+            
+            </div>
+          </div>
+          <div id="variables" class="main__task-div">
+            <div class="settings-sections">
+              <h3 class="task-title">Variables</h3>
+              <div class="variables-sections">
+              
+            
+              <div class="var-div">
+                <label for="inductorSpinner">Inductor L1</label>
+                <input class="var-spinner" id="inductorSpinner" name="value" />
+                <div class="var-slider" id="inductorSlider"></div>
+              </div>
+              <div class="var-div">
+                <label for="capacitorSpinner1">Capacitor C4</label>
+                <input class="var-spinner" id="capacitorSpinner1" name="value" />
+                <div class="var-slider" id="capacitorSlider1"></div>
+              </div>
+              <div class="var-div">
+                <label for="capacitorSpinner2">Capacitor C5</label>
+                <input class="var-spinner" id="capacitorSpinner2" name="value" />
+                <div class="var-slider" id="capacitorSlider2"></div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div id="controls" class="main__task-div">
+            <h3 class="task-title">Controls</h3>
+            <div class="settings-sections">
+              
+              <p id="message" style="text-align: center; margin-top: 20px;"></p>
+
+              <div class="control-task">
+                <button id="check-button" class="button" style="cursor: pointer;">Check</button> 
+                <button id="simulate-button" class="button" style="cursor: pointer;">Simulate</button>
+              </div>
+            </div>
+            </div>
+            
+          
+          <div id="comments" class="main__task-div">
+            <h3 class="task-title">Results</h3>
+            <div class="settings-sections">
+                <div class="control-sections">
+                  <p id="p1">The Frequency of the Colpitts Oscillator is found to be <span id="frequency"></span></p>
+               
+            </div>
+          </div>
+          </div>
+          <div class="main__task-div footer">
+            <p>Copyright © SOLVE The Virtual Lab @ NITK Surathkal</p>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOLVE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/query.css" />
+    <link rel="stylesheet" href="css/style1.css" />
+    <script
+      defer
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://code.jquery.com/ui/1.8.17/jquery-ui.min.js"
+    ></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script defer src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <script defer src="js/script.js"></script>
+    <!-- newly added script -->
+    <!-- script of plotly -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
+
+  <body>
+    <div class="title-div-container">
+      <div class="title-div">
+        <div class="logo-div">
+          <a href="#"><img src="images/nitk.svg" alt="Logo" class="logo" /></a>
+        </div>
+        <h1>RC Phase Shift Oscillator</h1>
+      </div>
+    </div>
+    <div class="container">
+      <div class="sidebar">
+        <ul class="tool-menu">
+          <li class="tool-list">
+            <a href="#simulation" class="tool-link" title="Simulation"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="icons"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6zM7.5 6h.008v.008H7.5V6zm2.25 0h.008v.008H9.75V6z"
+                />
+              </svg>
+              <span>Simulation</span></a
+            >
+          </li>
+          <li class="tool-list">
+            <a href="#variables" class="tool-link" title="Variables"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="icons"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.5 3c.967 2.78 1.5 5.817 1.5 9s-.533 6.22-1.5 9M8.25 8.885l1.444-.89a.75.75 0 011.105.402l2.402 7.206a.75.75 0 001.104.401l1.445-.889m-8.25.75l.213.09a1.687 1.687 0 002.062-.617l4.45-6.676a1.688 1.688 0 012.062-.618l.213.09"
+                />
+              </svg>
+              <span>Variables</span></a
+            >
+          </li>
+          <li class="tool-list">
+            <a href="#comments" class="tool-link" title="Comments"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="icons"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>Results</span></a
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="main">
+        <div class="main-section">
+          <div id="simulation" class="main__task-div">
+            <div class="title-control-div">
+              <h3 class="task-title">Simulation</h3>
+              <div id="controls" class="div__control"></div>
+            </div>
+
+            <div class="canvas__div">
+              <div id="canvas-container">
+                <canvas id="canvas" class="canvas"></canvas>
+              </div>
+              <img src="images/cir1.png" alt="circuitimage" id="cirimage" />
+              <img
+                id="red-block"
+                class="red-block"
+                src="images/cro.svg.png"
+                class="cro"
+              />
+
+              <button id="reset-button">Reset</button>
+              
+              <div id="popup" class="popup">
+                <div class="close-button" onclick="closePopup()">Close</div>
+                <div id="plot-container"></div>
+              </div>
+              <div id="popup1" class="popup1">
+                <div class="close-button1" onclick="closePopup1()">Close</div>
+
+                <div id="graph"></div>
+              </div>
+              <!-- points -->
+
+              <svg id="circuit-svg" class="circuit-svg">
+                <circle
+                  cx="155"
+                  cy="8"
+                  r="8"
+                  class="circuit-component"
+                  id="c1"
+                ></circle>
+
+                <circle
+                  cx="30"
+                  cy="92"
+                  r="8"
+                  class="circuit-component"
+                  id="c2"
+                ></circle>
+                <circle
+                  cx="93"
+                  cy="135"
+                  r="8"
+                  class="circuit-component"
+                  id="c3"
+                ></circle>
+                <circle
+                  cx="93"
+                  cy="8"
+                  r="8"
+                  class="circuit-component"
+                  id="c4"
+                ></circle>
+
+                <circle
+                  cx="30"
+                  cy="92"
+                  r="8"
+                  class="circuit-component"
+                  id="c5"
+                ></circle>
+                <circle
+                  cx="93"
+                  cy="8"
+                  r="8"
+                  class="circuit-component"
+                  id="c6"
+                ></circle>
+
+                <circle
+                  cx="93"
+                  cy="135"
+                  r="8"
+                  class="circuit-component"
+                  id="c7"
+                ></circle>
+                <circle
+                  cx="155"
+                  cy="8"
+                  r="8"
+                  class="circuit-component"
+                  id="c8"
+                ></circle>
+              </svg>
+              <!-- <svg id="circuit-svg" class="circuit-svg">
+                <circle
+                  cx="95"
+                  cy="10"
+                  r="8"
+                  class="circuit-component"
+                  id="c1"
+                ></circle>
+                <circle
+                  cx="32"
+                  cy="85"
+                  r="8"
+                  class="circuit-component"
+                  id="c2"
+                ></circle>
+
+                <circle
+                  cx="150"
+                  cy="10"
+                  r="8"
+                  class="circuit-component"
+                  id="c3"
+                ></circle>
+                <circle
+                  cx="32"
+                  cy="135"
+                  r="8"
+                  class="circuit-component"
+                  id="c4"
+                ></circle>
+
+                <circle
+                  cx="95"
+                  cy="10"
+                  r="8"
+                  class="circuit-component"
+                  id="c5"
+                ></circle>
+                <circle
+                  cx="32"
+                  cy="85"
+                  r="8"
+                  class="circuit-component"
+                  id="c6"
+                ></circle>
+
+                <circle
+                  cx="150"
+                  cy="10"
+                  r="8"
+                  class="circuit-component"
+                  id="c7"
+                ></circle>
+                <circle
+                  cx="32"
+                  cy="135"
+                  r="8"
+                  class="circuit-component"
+                  id="c8"
+                ></circle>
+              </svg> -->
+            </div>
+          </div>
+          <div id="variables" class="main__task-div">
+            <div class="settings-sections">
+              <h3 class="task-title">Variables</h3>
+              <div class="variables-sections">
+                <!-- <div class="var-div">
+                <label for="freqSpinner">Frequency(Hz):</label>
+                <input class="var-spinner" id="freqSpinner" name="value" />
+                <div class="var-slider" id="freqSlider"></div>
+              </div> -->
+                <div class="var-div">
+                  <label for="resSpinner">Resistance(Hz):</label>
+                  <input class="var-spinner" id="resSpinner" name="value" />
+                  <div class="var-slider" id="resSlider"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="comments" class="main__task-div">
+            <h3 class="task-title">Controls</h3>
+            <div class="settings-sections">
+              <div class="control-sections">
+                <div id="notify"></div>
+                <div style="display: flex">
+                  <button
+                    style="width: 30%"
+                    onclick="inputEnable()"
+                    id="check-button"
+                  >
+                    Check
+                  </button>
+                  <button
+                    style="width: 30%; padding-left: 5px"
+                    id="sim"
+                    onclick="simulate()"
+                  >
+                    Simulate
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="comments" class="main__task-div">
+            <h3 class="task-title">Results</h3>
+            <div class="settings-sections">
+              <div class="control-sections">
+                <div id="result"></div>
+              </div>
+            </div>
+          </div>
+          <div class="main__task-div footer">
+            <p>Copyright © SOLVE The Virtual Lab @ NITK Surathkal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

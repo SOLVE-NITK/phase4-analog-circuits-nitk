@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equations</title>
+    <script>
+        function sequenceEquation(n) {
+            if (n < 2 || n > 10) {
+                return "Equation not available for this value of n";
+            } else {
+                var convergentSeqEq = "Convergent Sequence: a_n = 1/" + n;
+                var divergentSeqEq = "Divergent Sequence: a_n = " + n;
+                return convergentSeqEq + "\n" + divergentSeqEq;
+            }
+        }
+
+        function seriesEquation(n) {
+            if (n < 2 || n > 10) {
+                return "Equation not available for this value of n";
+            } else {
+                var convergentSeriesEq = "Convergent Series: Σ(1/n^2)";
+                var divergentSeriesEq = "Divergent Series: Σ(1/n)";
+                if (n === 10) {
+                    return convergentSeriesEq + " = " + convergentSeries(10) + "\n" + divergentSeriesEq + " = " + divergentSeries(10);
+                } else {
+                    return "Final series equations will be displayed at n = 10";
+                }
+            }
+        }
+
+        function convergentSeries(n) {
+            var sum = 0;
+            for (var i = 1; i <= n; i++) {
+                sum += 1 / (i * i);
+            }
+            return sum.toFixed(4); // Rounding to 4 decimal places
+        }
+
+        function divergentSeries(n) {
+            var sum = 0;
+            for (var i = 1; i <= n; i++) {
+                sum += 1 / i;
+            }
+            return sum.toFixed(4); // Rounding to 4 decimal places
+        }
+
+        function displayEquations() {
+            var n = parseInt(document.getElementById("inputNumber").value);
+            document.getElementById("equationResult").innerText = sequenceEquation(n) + "\n" + seriesEquation(n);
+        }
+    </script>
+</head>
+<body>
+    <label for="inputNumber">Enter the value of n (2-10):</label>
+    <input type="number" id="inputNumber" min="2" max="10">
+    <button onclick="displayEquations()">Display Equations</button>
+    <div id="equationResult"></div>
+</body>
+</html>

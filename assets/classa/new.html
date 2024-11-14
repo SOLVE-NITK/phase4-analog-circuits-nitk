@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Class A Power Amplifier Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #circuit-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #circuit {
+      /* Styles for the circuit representation */
+    }
+
+    #inputs {
+      margin-left: 20px;
+    }
+
+    #output {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="circuit-container">
+    <div id="circuit">
+      <!-- Your circuit representation goes here -->
+    </div>
+    <div id="inputs">
+      <label for="input-voltage">Input Voltage (V):</label>
+      <input type="number" id="input-voltage" step="0.1" value="1">
+      <label for="input-frequency">Input Frequency (Hz):</label>
+      <input type="number" id="input-frequency" value="60">
+      <button onclick="simulate()">Simulate</button>
+    </div>
+  </div>
+  <div id="output">
+    <!-- Simulation results will be displayed here -->
+  </div>
+  <script>
+    function simulate() {
+      // Get input values
+      const inputVoltage = parseFloat(document.getElementById('input-voltage').value);
+      const inputFrequency = parseFloat(document.getElementById('input-frequency').value);
+
+      // Simulate amplifier (you can use any calculation method here)
+      const outputVoltage = simulateAmplifier(inputVoltage, inputFrequency);
+      const outputPower = Math.pow(outputVoltage, 2) / loadResistance;
+      const inputPower = Math.pow(inputVoltage, 2) / inputResistance;
+      const efficiency = (outputPower / inputPower) * 100;
+
+      // Display results
+      const outputDiv = document.getElementById('output');
+      outputDiv.innerHTML = `
+        <h2>Simulation Results</h2>
+        <p>Output Voltage: ${outputVoltage.toFixed(2)} V</p>
+        <p>Output Power: ${outputPower.toFixed(2)} W</p>
+        <p>Input Power: ${inputPower.toFixed(2)} W</p>
+        <p>Efficiency: ${efficiency.toFixed(2)}%</p>
+      `;
+    }
+
+    function simulateAmplifier(inputVoltage, inputFrequency) {
+  // Assuming the amplifier is ideal and has no losses, we can calculate the required output power
+  // to achieve a 25% efficiency.
+  const inputPower = Math.pow(inputVoltage, 2) / inputResistance; // Calculate input power
+
+  // Efficiency = (output power / input power) * 100
+  // Solving for output power:
+  // Efficiency = (outputPower / (inputVoltage^2 / inputResistance)) * 100
+  // 25 = (outputPower / (inputVoltage^2 / inputResistance)) * 100
+  // outputPower = 25 * (inputVoltage^2 / inputResistance) / 100
+  // outputPower = 0.25 * (inputVoltage^2 / inputResistance)
+  const outputPower = 0.25 * (Math.pow(inputVoltage, 2) / inputResistance);
+
+  // Now, we calculate the required output voltage using the derived output power.
+  const outputVoltage = Math.sqrt(outputPower * loadResistance);
+
+  return outputVoltage;
+}
+
+    const loadResistance = 1000; // Load resistance in ohms
+    const inputResistance = 10; // Input resistance in ohms
+  </script>
+</body>
+</html>

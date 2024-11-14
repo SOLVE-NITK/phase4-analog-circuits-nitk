@@ -1,0 +1,121 @@
+/* .container {
+    text-align: center;
+    margin-top: 50px;
+} */
+
+.red-block {
+  width: 240px;
+  height: 165px;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-left: -129px;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  border: 2px solid black;
+  z-index: 9999;
+}
+.popup1 {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  border: 2px solid black;
+  z-index: 9999;
+}
+
+.close-button {
+  cursor: pointer;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.close-button1 {
+  cursor: pointer;
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+#plot-container {
+  width: 400px;
+  height: 300px;
+}
+#plot-container1 {
+  width: 400px;
+  height: 300px;
+}
+#graph {
+  width: 400px;
+  height: 300px;
+}
+
+#check-button {
+  background-color: aliceblue;
+  border: 2px solid #272465;
+  padding: 8px;
+  border-radius: 9px;
+  font-size: 15px;
+  cursor: pointer;
+}
+#reset-button {
+  background-color: aliceblue;
+  border: 2px solid #272465;
+  padding: 8px;
+  border-radius: 9px;
+  font-size: 15px;
+  cursor: pointer;
+  width: 80px;
+}
+#sim {
+  background-color: aliceblue;
+  border: 2px solid #272465;
+  padding: 8px;
+  border-radius: 9px;
+  margin-left: 55px;
+  font-size: 15px;
+  cursor: pointer;
+}
+#att {
+  background-color: aliceblue;
+  border: 2px solid #272465;
+  padding: 8px;
+  border-radius: 9px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.plot {
+  background-color: aliceblue;
+  border: 2px solid #272465;
+  padding: 8px;
+  border-radius: 9px;
+  margin-left: 55px;
+  font-size: 15px;
+  cursor: pointer;
+}
+#cir1 {
+  width: 500px;
+}
+.circuit-svg {
+  width: 170px;
+  height: 346px;
+  /* border: 1px solid #ccc; */
+  position: absolute;
+  margin-top: 139px;
+  margin-left: 476px;
+}
+.red-block {
+  width: 221px;
+  height: 165px;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-left: -90px;
+}

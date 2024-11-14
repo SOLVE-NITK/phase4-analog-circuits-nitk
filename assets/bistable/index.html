@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOLVE</title>
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+  <link rel="stylesheet" href="css/general.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/query.css" />
+  <!-- <script defer src="https://code.jquery.com/jquery.min.js"></script> -->
+  <script defer src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <script defer src="https://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
+  <script defer src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script defer src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script defer type="text/javascript"
+    src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const canvas = document.getElementById('myCanvas');
+      const ctx = canvas.getContext('2d');
+      const graphButton = document.getElementById('graphButton');
+      const graphContainer = document.querySelector('.graph-container');
+
+      graphButton.addEventListener('click', function () {
+        // Toggle the display of graph container
+        if (graphContainer.style.display === 'none') {
+          graphContainer.style.display = 'block';
+        } else {
+          graphContainer.style.display = 'none';
+        }
+      });
+
+      const DOT_RADIUS = 7;
+      const ORANGE_COLOR = 'red';
+      const BLACK_COLOR = '#000';
+
+      // Define the positions of the fixed dots
+      const fixedDots = [
+        { x: 130, y: 160, color: ORANGE_COLOR }, //dot1
+        { x: 498, y: 160, color: ORANGE_COLOR }, //dot2
+        { x: 130, y: 321, color: BLACK_COLOR }, //dot 3
+        { x: 498, y: 321, color: BLACK_COLOR }, //dot 4
+        { x: 42, y: 152, color: ORANGE_COLOR }, //dot 5
+        { x: 588, y: 152, color: ORANGE_COLOR }, //dot 6
+        { x: 42, y: 168, color: BLACK_COLOR }, //dot 7
+        { x: 588, y: 168, color: BLACK_COLOR } //dot 8
+      ];
+
+      let dragging = false;
+      let startDot = null;
+      let connections = []; // Array to store connections between dots
+
+      function drawDot(x, y, color) {
+        ctx.beginPath();
+        ctx.arc(x, y, DOT_RADIUS, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      function drawLine(startX, startY, endX, endY, color) {
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.closePath();
+      }
+
+      function drawFixedDots() {
+        fixedDots.forEach(dot => {
+          drawDot(dot.x, dot.y, dot.color);
+        });
+      }
+
+      function connectDots(dot1, dot2) {
+        // Check if dots are of opposite colors
+        if (dot1.color !== dot2.color) {
+          alert('Wrong Connection');
+          return;
+        }
+
+        drawLine(dot1.x, dot1.y, dot2.x, dot2.y, dot1.color);
+        connections.push({ start: dot1, end: dot2 });
+
+        // Change the instruction text to "Click on check button"
+        document.getElementById('instructionText').textContent = "Instructions: Click on check button";
+
+        // Enable the check button
+        document.querySelector('.myButton[onclick="checkCircuit()"]').disabled = false;
+        document.querySelector('.myButton[onclick="history.go(0)"]').disabled = false;
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawFixedDots();
+        connections.forEach(conn => {
+          drawLine(conn.start.x, conn.start.y, conn.end.x, conn.end.y, conn.start.color);
+        });
+      }
+
+      function findDot(x, y) {
+        for (let i = 0; i < fixedDots.length; i++) {
+          const dot = fixedDots[i];
+          const distance = Math.sqrt((dot.x - x) ** 2 + (dot.y - y) ** 2);
+          if (distance <= DOT_RADIUS) {
+            return dot;
+          }
+        }
+        return null;
+      }
+
+      function dotHasConnection(dot) {
+        for (let i = 0; i < connections.length; i++) {
+          const conn = connections[i];
+          if (conn.start === dot || conn.end === dot) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      function handleMouseDown(event) {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        const clickedDot = findDot(mouseX, mouseY);
+
+        if (clickedDot && !dotHasConnection(clickedDot)) {
+          dragging = true;
+          startDot = clickedDot;
+        }
+      }
+
+      function handleMouseMove(event) {
+        if (dragging) {
+          const rect = canvas.getBoundingClientRect();
+          const mouseX = event.clientX - rect.left;
+          const mouseY = event.clientY - rect.top;
+
+          clearCanvas();
+          drawLine(startDot.x, startDot.y, mouseX, mouseY, startDot.color);
+        }
+      }
+
+      function handleMouseUp(event) {
+        if (dragging) {
+          const rect = canvas.getBoundingClientRect();
+          const mouseX = event.clientX - rect.left;
+          const mouseY = event.clientY - rect.top;
+
+          const endDot = findDot(mouseX, mouseY);
+
+          if (endDot && endDot !== startDot && !dotHasConnection(endDot)) {
+            connectDots(startDot, endDot);
+          }
+
+          dragging = false;
+          startDot = null;
+          clearCanvas();
+        }
+      }
+
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('mousemove', handleMouseMove);
+      canvas.addEventListener('mouseup', handleMouseUp);
+
+      // Initial drawing of fixed dots
+      drawFixedDots();
+
+      var state = 0;
+      function changeBulbImage1() {
+        const toggle = document.getElementById('toggle');
+        const bulbImg1 = document.getElementById('bulbImg1');
+        const bulbImg2 = document.getElementById('bulbImg2');
+
+        if (!toggle.checked) { // Toggle is unchecked
+          bulbImg1.src = 'https://image.ibb.co/cBBaeR/light_bulb_on.png'; // Bulb 1 on
+          bulbImg2.src = 'https://image.ibb.co/hoBxtm/light_bulb_off.png'; // Bulb 2 off
+        } else { // Toggle is checked
+          bulbImg1.src = 'https://image.ibb.co/hoBxtm/light_bulb_off.png'; // Bulb 1 off
+          bulbImg2.src = 'https://image.ibb.co/cBBaeR/light_bulb_on.png'; // Bulb 2 on
+        }
+      }
+
+      function displayText() {
+        var displayParagraph = document.getElementById("displayText");
+        var toggle = document.getElementById("toggle");
+
+        if (toggle.checked) {
+          displayParagraph.textContent = "";
+        } else {
+          displayParagraph.textContent = ""; // Empty the paragraph if not checked
+        }
+      }
+
+      window.changeBulbImage = function () {
+        const toggle = document.getElementById('toggle');
+        const bulbImg1 = document.getElementById('bulbImg1');
+        const bulbImg2 = document.getElementById('bulbImg2');
+
+        if (toggle.checked) {
+          bulbImg1.src = 'https://image.ibb.co/hoBxtm/light_bulb_off.png';
+          bulbImg2.src = 'https://image.ibb.co/hoBxtm/light_bulb_on.png';
+        } else {
+          bulbImg1.src = 'https://image.ibb.co/hoBxtm/light_bulb_on.png';
+          bulbImg2.src = 'https://image.ibb.co/hoBxtm/light_bulb_off.png';
+        }
+      };
+
+      window.checkCircuit = function () {
+        let rightConnection = true;
+        let wrongConnection = false;
+
+        // Define the required correct connections
+        const correctConnections = [
+          { start: fixedDots[0], end: fixedDots[4] }, // dot 1 to dot 5
+          { start: fixedDots[1], end: fixedDots[5] }, // dot 2 to dot 6
+          { start: fixedDots[2], end: fixedDots[6] }, // dot 3 to dot 7
+          { start: fixedDots[3], end: fixedDots[7] }  // dot 4 to dot 8
+        ];
+
+        // Check all correct connections
+        correctConnections.forEach(conn => {
+          if (!connections.some(c => (c.start === conn.start && c.end === conn.end) || (c.start === conn.end && c.end === conn.start))) {
+            rightConnection = false;
+          }
+        });
+
+        // Check for opposite color connections
+        connections.forEach(conn => {
+          const startColor = conn.start.color;
+          const endColor = conn.end.color;
+          if (startColor !== endColor) {
+            wrongConnection = true;
+          }
+        });
+
+        // Determine which alert to show based on conditions
+        if (rightConnection && !wrongConnection) {
+          alert('Right connection: All required connections are correct!');
+          // Disable the check button
+          document.querySelector('.myButton[onclick="checkCircuit()"]').disabled = true;
+          // Change the instruction text
+          document.getElementById('instructionText').textContent = "Instructions: Now, Change the state of toogle switch and then click on simulate button";
+          // Enable the toggle switch
+          document.getElementById('toggle').disabled = false;
+          // Enable the simulate button
+          document.querySelector('.myButton[onclick="changeBulbImage1(); displayText();"]').disabled = false;
+          // Enable the toggle-wrapper section
+          var toggleWrapper = document.getElementById('toggle-wrapper');
+          toggleWrapper.classList.remove('disabled');
+        } else if (wrongConnection) {
+          alert('Wrong connection: Opposite colored dots should not be connected!');
+        } else {
+          alert('Complete the connections: Ensure all required connections are made.');
+        }
+      };
+
+      window.resetCanvas = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawFixedDots();
+        connections = [];
+        // Disable the check button
+        document.querySelector('.myButton[onclick="checkCircuit()"]').disabled = true;
+        // Disable the toggle switch
+        document.getElementById('toggle').disabled = true;
+        // Disable the simulate and reset buttons
+        document.querySelector('.myButton[onclick="changeBulbImage1(); displayText();"]').disabled = true;
+      };
+
+      document.getElementById('toggle').addEventListener('change', function () {
+        const simulateButton = document.querySelector('.myButton[onclick="changeBulbImage1(); displayText();"]');
+        const resetButton = document.querySelector('.myButton[onclick="history.go(0)"]');
+
+        if (this.checked || !this.disabled) {
+          simulateButton.disabled = false;
+          resetButton.disabled = false;
+        } else {
+          simulateButton.disabled = true;
+          resetButton.disabled = true;
+        }
+
+        changeBulbImage1();
+        changeBulbImage();
+        displayText();
+      });
+    });
+  </script>
+  <style>
+    canvas {
+      cursor: pointer;
+    }
+
+    .myButton:disabled,
+    button[disabled] {
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #666666;
+    }
+
+    #bulbImg1 {
+      width: 40px;
+      margin-right: -70px;
+      margin-top: 140px;
+      transform: rotate(-90deg);
+      -drag: none;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+
+    #bulbImg2 {
+      width: 40px;
+      margin-top: 140px;
+      transform: rotate(90deg);
+      margin-left: -10px;
+      -drag: none;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+
+    .toggle-wrapper {
+      position: relative;
+    }
+
+    .toggle-checkbox {
+      display: none;
+    }
+
+    .toggle-label {
+      display: inline-block;
+      width: 60px;
+      height: 30px;
+      background-color: #ddd;
+      border: 2px solid black;
+      border-radius: 5px;
+      position: relative;
+      cursor: pointer;
+      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle-inner {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-switch {
+      display: block;
+      width: 26px;
+      height: 26px;
+      background-color: #fff;
+      border: 2px solid black;
+      border-radius: 100%;
+      position: absolute;
+      top: 50%;
+      left: 2px;
+      transform: translateY(-50%);
+      transition: transform 0.3s;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .toggle-checkbox:checked+.toggle-label .toggle-switch {
+      transform: translate(30px, -50%);
+    }
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  </style>
+
+  <script defer src="js/script.js"></script>
+</head>
+
+<body>
+  <!-- Logo -->
+  <!-- Experiment Title -->
+  <!-- Tools Sections -->
+  <!-- Tools Container -->
+  <!-- Simulation Container -->
+  <div class="title-div-container">
+
+    <div class="title-div">
+      <!-- <span class="round left-top"></span>
+          <span class="round left-bottom"></span>
+          <span class="round right-top"></span>
+          <span class="round right-bottom"></span> -->
+      <div class="logo-div">
+        <a href="#"><img src="images/logo_nitk.png" alt="Logo" class="logo" /></a>
+      </div>
+      <h1>Bistable Multivibrator</h1>
+    </div>
+  </div>
+  <div class="container">
+    <div class="sidebar">
+      <ul class="tool-menu">
+        <li class="tool-list">
+          <a href="#simulation" class="tool-link" title="Simulation"><svg xmlns="http://www.w3.org/2000/svg"
+              fill="#089B93" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" class="icons">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6zM7.5 6h.008v.008H7.5V6zm2.25 0h.008v.008H9.75V6z" />
+            </svg>
+          </a>
+          <span>Simulation</span>
+        </li>
+        <li class="tool-list">
+          <a href="#variables" class="tool-link" title="Variables"><svg xmlns="http://www.w3.org/2000/svg"
+              fill="#ffffff" viewBox="0 0 24 24" stroke-width="1.5" stroke="#089B93" class="icons">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.5 3c.967 2.78 1.5 5.817 1.5 9s-.533 6.22-1.5 9M8.25 8.885l1.444-.89a.75.75 0 011.105.402l2.402 7.206a.75.75 0 001.104.401l1.445-.889m-8.25.75l.213.09a1.687 1.687 0 002.062-.617l4.45-6.676a1.688 1.688 0 012.062-.618l.213.09" />
+            </svg></a>
+          <span>Variables</span>
+        </li>
+        <li class="tool-list" onclick="displayEquations()">
+          <a href="#comments" class="tool-link" title="Comments"><svg xmlns="http://www.w3.org/2000/svg" fill="#089B93"
+              viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" class="icons">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg></a>
+          <span>Results</span>
+        <li class="tool-list">
+          <img style="cursor: pointer;" id="graphButton" src="./images/graphbutton.svg" alt="" class="icons" />
+          <span>Graph</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="main">
+      <div class="main-section">
+        <div id="simulation" class="main__task-div">
+          <!-- <div id="controls" class="div__control">
+              <img id="playpausebutton" onclick="simstate()" src="./images/blueplaydull.svg" alt="" />
+              <img id="graphbutton" onclick="plotgraph()" src="./images/graphbutton.svg" alt="" />
+            </div> -->
+          <div>
+            <header class="header-bar">
+              <div class="header-title">Simulation</div>
+            </header>
+          </div>
+          <div class="canvas__div">
+            <p id="instructionText">Instructions: Connect the connections</p>
+            <div id="canvas-container">
+              <div>
+                <img id="bulbImg1" src="https://image.ibb.co/hoBxtm/light_bulb_off.png" alt="Blub">
+              </div>
+              <div style="position: absolute; margin-bottom: 10%;">
+                <img src="images/vcc.png" alt="Circuit Diagram" class="circuit-diagram" width="750px" height="400px">
+              </div>
+              <div style="position: absolute; margin-top: 340px;">
+                <img src="images/bluearrow.png" style="margin-right: 16px;" alt="Blue Arrow" id="blueArrow" width="34px"
+                  height="30px">
+                <img src="images/greenarrow.png" style="margin-left: 46px; display: none;" alt="Green Arrow"
+                  id="greenArrow" width="34px" height="30px">
+              </div>
+              <div style="position: relative;">
+                <canvas id="myCanvas" width="600" height="400"></canvas>
+              </div>
+              <div>
+                <img id="bulbImg2" src="https://image.ibb.co/hoBxtm/light_bulb_off.png" alt="Blub">
+              </div>
+              <div id="led1" class="led" style="display: none;"></div>
+              <div id="led2" class="led" style="display: none;"></div>
+            </div>
+            <!--
+            <div class="graph-div display-hide">
+              <canvas id="graphscreen1" class="canvas">
+              </canvas>
+            </div>
+            -->
+          </div>
+        </div>
+
+        <div id="variables" class="main__task-div">
+          <div class="settings-sections">
+            <h3 class="task-title">Variables</h3>
+            <div id="toggle-wrapper" class="variables-sections disabled">
+              <div class="switch">
+                <label>Trigger Input</label>
+                <div class="toggle-wrapper">
+                  <span class="dotb">
+                    <h4>A</h4>
+                  </span>
+                  <input type="checkbox" id="toggle" class="toggle-checkbox" disabled />
+                  <label for="toggle" class="toggle-label">
+                    <span class="toggle-inner"></span>
+                    <span class="toggle-switch"></span>
+                  </label>
+                  <span class="dotg">
+                    <h4>B</h4>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="comments" class="main__task-div">
+          <h3 class="task-title">Controls</h3>
+          <div class="settings-sections">
+            <button class="myButton" onclick="checkCircuit()" disabled>Check</button>
+            <button class="myButton" id="simulateButton" onclick="changeBulbImage1(); displayText();"
+              disabled>Simulate</button>
+            <button class="myButton" onclick="history.go(0)" disabled>Reset</button>
+            <!--
+            <button class="myButton" onclick="changeBulbImage()" disabled>Graph</button>
+            -->
+          </div>
+        </div>
+
+        <div id="graph" class="main__task-div">
+          <h3 class="task-title">Results</h3>
+          <div class="settings-sections">
+            <p id="displayText"></p>
+            <div class="graph-container" style="text-align: center; margin-top: 20px; display: none;">
+              <canvas style="height: 200px;" id="graphCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="main__task-div footer">
+          <p>Copyright © SOLVE The Virtual Lab @ NITK Surathkal</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SOLVE-Class A Power Amplifier</title>
+    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"/>
+    <link rel="stylesheet" href="css/general.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/query.css" />
+    <script
+      defer
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://code.jquery.com/ui/1.8.17/jquery-ui.min.js"
+    ></script>
+    <script defer src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script defer src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+      defer
+      type="text/javascript"
+      src="//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"
+    ></script>
+    <script defer src="js/jsplumb.js"></script>
+
+    <script defer src="js/demo.js"></script>
+  </head>
+  <body onload="varinit();startsim();">
+   
+    <div class="title-div-container">
+
+      <div class="title-div">
+        
+          <div class="logo-div">
+            <a href="#"><img src="images/logo_nitk.png" alt="Logo" class="logo" /></a>
+          </div>
+          <h1>Class A Power Amplifier</h1>
+        </div>
+      </div>
+    <div class="container">
+      <div class="sidebar">
+        <ul class="tool-menu">
+          <li class="tool-list">
+            <a href="#simulation" class="tool-link" title="Simulation"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#fdfdfd"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#1a1967"
+                class="icons">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 8.25V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6zM7.5 6h.008v.008H7.5V6zm2.25 0h.008v.008H9.75V6z"
+                />
+              </svg>
+            </a>
+            <span>Simulation</span>
+          </li>
+          <li class="tool-list">
+            <a href="#variables" class="tool-link" title="Variables"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#ffffff"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#1a1967"
+                class="icons">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.5 3c.967 2.78 1.5 5.817 1.5 9s-.533 6.22-1.5 9M8.25 8.885l1.444-.89a.75.75 0 011.105.402l2.402 7.206a.75.75 0 001.104.401l1.445-.889m-8.25.75l.213.09a1.687 1.687 0 002.062-.617l4.45-6.676a1.688 1.688 0 012.062-.618l.213.09"/>
+              </svg>
+            </a>
+              <span>Variables</span>
+          </li>
+          <li class="tool-list">
+            <a href="#controls" class="tool-link" title="controls"
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#fdfdfd"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#1a1967"
+                class="icons"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg></a
+              >
+              
+              <span>Controls</span>
+          </li>
+          <!-- <li class="tool-list">
+            <img id="playpausebutton" onclick="simstate()" src="images/bluepausedull.svg" alt="" class="icons"/>
+            <span class="playPause">Pause</span>
+          </li> -->
+          <li class="tool-list">
+            <img id="button" onclick="plotgraph()" src="./images/graphbutton.svg" alt="" class="icons"/>
+            <span>Graph</span>
+          </li>
+        </ul>
+      </div>
+      <div class="main">
+        <div class="main-section">
+          <div id="simulation" class="main__task-div">
+            
+            <h3 class="task-title">Simulation</h3>
+            <div class="canvas__div">
+              
+              <div class="circuit-dia">
+                
+                  <div class="img1">
+                    <img id="image1" class="image1" src="images/CRO (1).png" alt="Class A power Amplifier">
+                    <div id="dot1Red" class="dot dot-red dot-red--1"></div>
+                    <div id="dot1Black" class="dot dot-black dot-black--1"></div>
+                  </div>
+                  <div class="img2">
+                    <img id="image2" class="image2" src="images/OIP.jpeg" alt="oscilloscope">
+                    <div id="dot2Red" class="dot dot-red dot-red--2"></div>
+                    <div id="dot2Black" class="dot dot-black dot-black--2"></div>
+                  </div>
+                  <div class="line-1"></div>
+                <div class="line-2"></div>
+                </div>
+                
+              
+            
+              <div class="graph-div display-hide">
+                <canvas id="graphscreen1"></canvas>           
+                 </div>
+              <div class="graph-div display-hide">
+                <canvas id="graphscreen2"></canvas>           
+              </div>
+              <div class="graph-div display-hide" style="width: 80%; height: auto; align-items: center;">
+                <canvas id="graphscreen3"></canvas>           
+                 </div>
+          
+            </div>
+          </div>
+          <div id="variables" class="main__task-div">
+            <div class="settings-sections">
+              <h3 class="task-title">Variables</h3>
+              <div class="variables-sections">
+              
+            
+              <div class="var-div">
+                <label for="frequencySpinner">frequency F</label>
+                <input class="var-spinner" id="frequencySpinner" name="value" />
+                <div class="var-slider" id="frequencySlider"></div>
+              </div>
+              <div class="var-div">
+                <label for="voltageSpinner">voltage V</label>
+                <input class="var-spinner" id="voltageSpinner" name="value" />
+                <div class="var-slider" id="voltageSlider"></div>
+              </div>
+              <!-- <div class="var-div">
+                <label for="inductorSpinner2">inductor L2</label>
+                <input class="var-spinner" id="inductorSpinner2" name="value" />
+                <div class="var-slider" id="inductorSlider2"></div>
+              </div> -->
+            </div>
+            </div>
+          </div>
+
+          <div id="controls" class="main__task-div">
+            <h3 class="task-title">Controls</h3>
+            <div class="settings-sections">
+              
+              <p id="message" style="text-align: center; margin-top: 20px;"></p>
+
+              <div class="control-task">
+                <button id="check-button" class="button" style="cursor: pointer;">Check</button> 
+                <button id="simulate-button" class="button" style="cursor: pointer;">Simulate</button>
+                <button id="tabulate-button" class="button" style="cursor: pointer;">Tabulate</button>
+                <button id="plot-button" class="button" style="cursor: pointer;">Plot</button>
+              </div>
+            </div>
+            </div>
+            
+          
+          <div id="comments" class="main__task-div">
+            <h3 class="task-title">Tabulate</h3>
+            <div class="settings-sections">
+                <div class="control-sections">
+                  <table id="tabulate-table" cellspacing="0" cellpadding="2%" border="2 solid black">
+                 
+                    <tr bgcolor="#ffffff" class="font">
+                      <th id="s">Sl.No</th>
+                      <th id="v"> V<sub>in</sub></th>
+                      <th id="v"> V<sub>out</sub></th>
+                      <th id="p"> P<sub>ac</sub> = (V<sub>out</sub>^2) / 2RL</th>
+                      <th id="p"> P<sub>dc</sub> = V<sub>cc</sub> * I<sub>cq</sub> </th>
+                      <th id="e"> % Effeciency = (P<sub>ac</sub> / P<sub>dc</sub>) * 100</th>
+  
+                    </tr>
+                  </table> 
+                
+            </div>
+            
+          </div>
+          
+          </div>
+          <div id="result" class="main__task-div">
+            <h3 class="task-title">Result</h3>
+            <div class="settings-sections">
+              <div class="control-sections">
+                <p id="res" style="text-align: center; margin-top: 20px;">Efficiency of Class A Power Amplifier is 25%</p>
+          </div>
+          </div>
+          </div>
+          <div class="main__task-div footer">
+            <p>Copyright © SOLVE The Virtual Lab @ NITK Surathkal</p>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
